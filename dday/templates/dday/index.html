@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D-Day</title>
+</head>
+<body>
+    <div style="background-color:rgba(255,255,0,0.7); left:0; top:0; height:100%; width:20rem; position:fixed; padding: 10px; box-sizing: border-box; text-align:center;">
+        <p><b>D-day 등록</b></p>
+        <form method="post" action="{% url 'dday:addEvent' %}">{% csrf_token %}
+            <textarea name="title" style="width:100%; height:20rem; font-size:20px;" required></textarea>
+            <input type="date" name="offset" style="width:100%" required>
+            <br><br>
+            <button type="submit" style="width:100%; height:2rem;">등록하기</button>
+        </form>
+    </div>
+
+    <div style="margin:0 0 0 21rem;">
+
+        {% if list %}
+        {% for item in list %}
+        <div style="border: 1px solid black; margin: 10px 0">
+            <h2 style="margin-Bottom:0; display:inline-block;">{{ item.title }}</h2>
+            <p style="display:inline-block;">{{item.time }}</p>
+            <form style="display:inline-block; " method="post" action="{% url 'dday:deleteEvent' %}">{% csrf_token %}
+                <button type="submit" name="id" value="{{item.id}}" style="display:inline-block; background-color:transparent; border: none;">삭제하기</button>
+            </form>
+            {% if item.days < 0 %}
+            <h1>D{{ item.days }}</h1>
+            {% elif item.days == 0 %}
+            <h1>D-Day</h1>
+            {% else %}
+            <h1>D+{{ item.days }}</h1>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+</body>
+</html>
