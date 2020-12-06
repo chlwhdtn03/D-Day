@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime, timedelta, timezone
-from .models import Event
+from .models import Event, Comment
 
 # Create your views here.
 def index(request):
@@ -20,6 +20,13 @@ def addEvent(request):
     e = Event(title=request.POST['title'], offset=request.POST['offset'], pub_date=datetime.now(timezone.utc))
     e.save()
     return HttpResponseRedirect(reverse('dday:index'))
+
+
+def addComment(request):
+    event = get_object_or_404(Event, id=request.POST['id'])
+    comment = Comment(event=event, text=request.POST['text'], pub_date=datetime.now(timezone.utc))
+    comment.save()
+    return HttpResponseRedirect(reverse('dday:index') + '#' + str(event.id))
 
 
 def deleteEvent(request):

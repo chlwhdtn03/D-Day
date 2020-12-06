@@ -19,7 +19,7 @@
 
         {% if list %}
         {% for item in list %}
-        <div style="border: 1px solid black; margin: 10px 0">
+        <div style="background-color:AntiqueWhite; box-shadow: 0px 0px 5px red; padding: 10px; margin: 20px 0" id="{{item.id}}">
             <h2 style="margin-Bottom:0; display:inline-block;">{{ item.title }}</h2>
             <p style="display:inline-block;">{{item.time }}</p>
             <form style="display:inline-block; " method="post" action="{% url 'dday:deleteEvent' %}">{% csrf_token %}
@@ -32,6 +32,15 @@
             {% else %}
             <h1>D+{{ item.days }}</h1>
             {% endif %}
+
+            <form method="post" action="{% url 'dday:addComment' %}">{% csrf_token %}
+                <input type="text" name="text" required>
+                <button type="submit" name="id" value="{{item.id}}">댓글 작성</button>
+            </form>
+            {% for comment in item.comment_set.all %}
+                <li>익명 : {{ comment.text }}</li>
+            {% endfor %}
+
         </div>
         {% endfor %}
         {% endif %}
